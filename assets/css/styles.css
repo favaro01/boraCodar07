@@ -1,0 +1,28 @@
+.card {
+    width: 32% !important;
+    margin-bottom: 1rem;
+}
+  
+.card-img-top {
+    height: 10rem;
+    object-fit: cover;
+}
+  
+#searchInput {
+    width: 100%;
+}
+  
+#citySelect {
+    width: 100%;
+}
+  
+#cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+  
+#paginationContainer {
+    margin-top: 1rem;
+}
+  
