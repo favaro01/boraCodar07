@@ -1,3 +1,34 @@
+:root {
+    --white: #fff;
+    --gray-100: #F8F8FF;
+    --gray-300: #EAEAEA;
+    --gray-900: #121214;
+
+    --purple-300: #6246EA;
+
+    --red-500: #E45858;
+}
+
+::-webkit-scrollbar-track
+{
+	border: 5px solid white;
+	// border color does not support transparent on scrollbar
+	// border-color: transparent;
+	background-color: #b2bec3;
+}
+
+::-webkit-scrollbar
+{
+	width: 5px;
+	background-color: var(--gray-300);
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: var(--purple-300);
+	border-radius: 20px;
+}
+
 .card {
     width: 32% !important;
     margin-bottom: 1rem;
@@ -25,4 +56,67 @@
 #paginationContainer {
     margin-top: 1rem;
 }
-  
+
+.contentFilterBlock{
+    background: url('../img/ilustra-01.svg'), url('../img/ilustra-02.svg'), var(--gray-100);
+    background-position: top left, right bottom;
+    background-size: 30%;
+    background-repeat: no-repeat;
+}
+
+.rowFilterBlock{
+    min-height: 55vh;
+    width: 100%;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+
+.rowTextFilter{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+
+.rowTextFilter p{
+    color: var(--red-500);
+}
+
+.rowTextFilter h1{
+    text-align: center;
+    color: var(--gray-900);
+}
+
+.rowTextFilter span{
+    color: var(--purple-300);
+}
+
+.btnListorMap button{
+    color: var(--purple-300);
+}
+
+.btnListorMap button.active{
+    color: var(--white);
+    background-color: var(--purple-300) !important;
+}
+
+#paginationContainer .page-item .page-link{
+    color: var(--purple-300);
+}
+
+#paginationContainer .page-item.active .page-link{
+    color: var(--white);
+    background-color: var(--purple-300) !important;
+    border-color: transparent;
+    background-image: none;
+    outline: 0;
+    box-shadow: none;
+}
+.filtersCard.card{
+    width: 100% !important;
+}
+#map{
+    margin-bottom: 5vh;
+}
