@@ -193,51 +193,100 @@ function getCities() {
     return cities;
 }
 
-// Cria um mapa com os pins dos locais
 function renderMap() {
-    // Seleciona o elemento div do mapa
-    const mapContainer = document.querySelector('#map');
-  
-    // Define a localização inicial e o zoom do mapa
-    const initialLocation = [cards[0].lat, cards[0].lng];
-    const zoomLevel = 10;
-  
-    // Cria o mapa
-    const map = L.map(mapContainer).setView(initialLocation, zoomLevel);
-  
-    // Adiciona o tile layer do mapa
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      maxZoom: 18,
-      id: 'mapbox.streets'
-    }).addTo(map);
-  
-    // Adiciona os pins para cada local do array de cards de forma assíncrona
-    let i = 0;
-    const addMarker = () => {
-      if (i < cards.length) {
-        const card = cards[i];
-        const marker = L.marker([card.lat, card.lng]).addTo(map);
-        marker.bindPopup(`<b>${card.title}</b><br>${card.description}`).openPopup();
-        i++;
-        setTimeout(addMarker, 10); // espera 10ms antes de adicionar o próximo marcador
-      }
-    };
-    addMarker();
-    
-    // Adiciona o clustering de marcadores
-    const markers = L.markerClusterGroup();
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-      const marker = L.marker([card.lat, card.lng]);
-      marker.bindPopup(`<b>${card.title}</b><br>${card.description}`);
-      markers.addLayer(marker);
+  const map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      })
+    ],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([cards[0].lng, cards[0].lat]),
+      zoom: 10
+    })
+  });
+
+  const markerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: []
+    })
+  });
+
+  map.addLayer(markerLayer);
+
+  const textStyle = new ol.style.Style({
+    text: new ol.style.Text({
+      text: '',
+      font: '12px Calibri,sans-serif',
+      fill: new ol.style.Fill({ color: '#000' }),
+      backgroundFill: new ol.style.Fill({ color: '#fff' }),
+      padding: [3, 3, 3, 3],
+      offsetY: -25,
+      textAlign: 'center',
+      overflow: true
+    })
+  });
+
+  cards.forEach((card) => {
+    const marker = new ol.Feature({
+      geometry: new ol.geom.Point(
+        ol.proj.fromLonLat([card.lng, card.lat])
+      )
+    });
+
+    marker.setStyle(new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [0.5, 1],
+        src: 'https://openlayers.org/en/latest/examples/data/icon.png'
+      }),
+      text: new ol.style.Text({
+        text: card.title,
+        offsetY: -20,
+        font: 'bold 12px Calibri,sans-serif',
+        fill: new ol.style.Fill({ color: '#000' }),
+        backgroundFill: new ol.style.Fill({ color: '#fff' }),
+        padding: [3, 3, 3, 3],
+        textAlign: 'center',
+        overflow: true
+      })
+    }));
+
+    marker.set('card', card);
+    markerLayer.getSource().addFeature(marker);
+  });
+
+  const popup = new ol.Overlay.Popup({
+    popupClass: 'default', // Use default popup style
+    positioning: 'bottom-center',
+    autoPan: true,
+    autoPanAnimation: { duration: 250 },
+  });
+
+  map.addOverlay(popup);
+
+  map.on('click', (event) => {
+    const feature = map.forEachFeatureAtPixel(event.pixel, (f) => f);
+
+    if (feature) {
+      const card = feature.get('card');
+      const content = `
+        <div>
+          <h2>${card.title}</h2>
+          <p>${card.description}</p>
+        </div>
+      `;
+
+      popup.show(event.coordinate, content);
+    } else {
+      popup.hide();
     }
-    map.addLayer(markers);
+  });
 }
-  
+
+
+
+
 // Chama a função de renderização pela primeira vez
 render();
 
