@@ -120,5 +120,21 @@
 #map{
     margin-bottom: 5vh;
 }
+@media (max-width: 48rem){
+    html{
+        font-size: 87.5%;
+    }
 
-  
+    .rowTitleCards{
+        flex-direction: column;
+        margin-bottom: 2rem;
+    }
+
+    #cardsContainer{
+        padding: 0 1rem;
+    }
+
+    .card{
+        width: 100% !important;
+    }
+}

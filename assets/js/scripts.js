@@ -284,9 +284,6 @@ function renderMap() {
   });
 }
 
-
-
-
 // Chama a função de renderização pela primeira vez
 render();
 
