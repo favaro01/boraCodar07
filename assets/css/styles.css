@@ -124,6 +124,14 @@
     html{
         font-size: 87.5%;
     }
+    
+    .contentFilterBlock {
+        background-size: 50%;
+    }
+
+    .filtersCard #searchInput{
+        margin-bottom: .5rem !important;
+    }
 
     .rowTitleCards{
         flex-direction: column;
